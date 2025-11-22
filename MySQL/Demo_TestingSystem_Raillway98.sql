@@ -28,7 +28,7 @@ CREATE TABLE `Account`(
     Email					VARCHAR(50) NOT NULL UNIQUE KEY,
     Username				VARCHAR(50) NOT NULL UNIQUE KEY,
     FullName				NVARCHAR(50) NOT NULL,
-    DepartmentID 			TINYINT UNSIGNED NOT NULL,
+    DepartmentID 			TINYINT UNSIGNED ,
     PositionID				TINYINT UNSIGNED NOT NULL,
     CreateDate				DATETIME DEFAULT NOW(),
     FOREIGN KEY(DepartmentID) REFERENCES Department(DepartmentID) ON DELETE CASCADE,
@@ -271,12 +271,232 @@ SELECT * FROM Account WHERE DepartmentID = 2 OR PositionID= 3; -- Hoặc
 
 -- Lấy ra tất cả Account mà có DepartmentID =2 ,3,7
 SELECT * FROM Account WHERE DepartmentID = 2 OR DepartmentID = 3 OR DepartmentID = 7;
-SELECT * FROM Account WHERE DepartmentID IN (2,3,7);
+SELECT * FROM Account WHERE DepartmentID IN (2,3,7); -- Trong tập
+SELECT * FROM Account WHERE DepartmentID NOT IN (2,3,7);  -- NOT: phủ định
+
+SELECT * FROM Account WHERE DepartmentID IN (1,2,3,4,5,6);  -- Dãy số liên tiếp 1 -6
+SELECT * FROM Account WHERE DepartmentID BETWEEN 1 AND 20;
+
+SELECT * FROM Account WHERE CreateDate IS NULL;  -- null: Trống rỗng, không có dữ liệu
+SELECT * FROM Account WHERE CreateDate IS NOT NULL ; 
+
+SELECT * FROM Account WHERE CreateDate > '2020-01-01 00:00:00'; 
+
+-- Lấy ra tất cả các bản ghi trong bảng Account, mà có fullname bắt đầu bằng chữ N
+SELECT * FROM Account WHERE FullName Like N'N%';
+SELECT * FROM Account WHERE FullName LIKE  'N%'; -- Like: Sử dụng để so sánh gần đúng.
+
+-- Lấy ra tất cả các bản ghi trong bảng Account, mà fullname có chữ thứ 2 là u  -- Full
+SELECT * FROM Account WHERE FullName LIKE  '_u%';
+-- Like
+-- Wildcard  
+-- %: thay thế cho nhiều ký tự
+-- _T: thay thế cho 1 ký tự
+
+-- Hãy đếm số bản ghi trong bảng Account
+SELECT * FROM Account;
+SELECT COUNT(*) FROM Account;  -- Hàm- Function  count()-- Đếm số bản ghi trong kết quả đầu ra
+SELECT COUNT(1) FROM Account;
+
+SELECT *,(1) FROM Account;
+
+SELECT COUNT(CreateDate) FROM Account;
+
+SELECT length(Fullname) FROM Account;  -- 9 ký tự
+
+SELECT UPPER('NguyenQuanDAO');
+SELECT NOW();
+SELECT curdate();
+SELECT curtime();
+
+DROP TABLE IF EXISTS `Student`;
+CREATE TABLE `Student`(
+     Id		                    TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	 Student_Name				VARCHAR(50) NOT NULL,
+     Subject_Name		      	VARCHAR(50) NOT NULL,
+     Point_Student				TINYINT
+);
+SELECT * FROM Student;
+INSERT INTO Student (Student_Name, Subject_Name, Point_Student)
+VALUES				('Name1',	'Sql', 		'7'),
+					('Name2',	'Java', 	'8'),
+                    ('Name3',	'Java', 	'9'),
+                    ('Name4',	'Sql', 		'5'),
+                    ('Name5',	'Java', 	'4'),
+                    ('Name6',	'Spring', 	'5'),
+                    ('Name7',	'Java', 	'8'),
+                    ('Name8',	'Spring', 	'8'),
+					('Name9',	'Sql', 	'5'),
+                    ('Name10',	'Spring', 	'4'),
+                    ('Name11',	'Sql', 	'5'),
+                    ('Name12',	'Spring', 	'8'),
+                    ('Name13',	'Sql', 	'8')
+                    ;
+
+SELECT * FROM Student;
+-- Tỉnh tổng điểm của các bạn học viên
+SELECT SUM(Point_Student) FROM Student;
+
+-- Tìm điểm số lớn nhất và nhỏ nhất, điểm số trung bình trong bảng điểm
+SELECT Max(Point_Student) FROM Student;
+SELECT MIN(Point_Student) FROM Student;
+SELECT AVG(Point_Student) FROM Student;
+
+-- Đánh Alias cho trường dữ liệu, hoặc cho bảng dữ liệu
+SELECT s.Student_Name, s.Subject_Name FROM student s;
+
+-- Tìm điểm số lớn nhất của môn sql
+SELECT Subject_Name, MAX(Point_Student) AS Sql_Score FROM Student  WHERE Subject_Name = 'Sql';
+-- Tìm điểm số lớn nhất của môn java
+SELECT Subject_Name, MAX(Point_Student) AS Java_Score FROM Student WHERE Subject_Name = 'Java';
+-- Tìm điểm số lớn nhất của môn spring
+SELECT Subject_Name, MAX(Point_Student) Spring_Score FROM Student WHERE Subject_Name = 'Spring';
+
+-- 
+SELECT 'Sql' AS Subject_Name, MAX(Point_Student) AS Sql_Point FROM Student WHERE Subject_Name = 'Sql'
+UNION 
+SELECT 'Java' AS Subject_Name, MAX(Point_Student) AS Java_Point FROM Student WHERE Subject_Name = 'Java'
+UNION 
+SELECT 'Spring' AS Subject_Name, MAX(Point_Student) AS Spring_Point FROM Student WHERE Subject_Name = 'Spring';
+
+SELECT * FROM Student;
+
+--
+SELECT Subject_Name, max(Point_Student) FROM student 
+GROUP BY Subject_Name;
+
+-- Đếm số lượng học viên trong mỗi môn học, Chỉ hiển thị những môn học có ít nhất 4 bạn học viên >=4
+SELECT Subject_Name,count(*) AS Amount FROM student  
+GROUP BY Subject_Name
+HAVING count(*) >= 4;
+
+-- ORDER BY
+-- ASC: Tăng dần- Mặc định
+-- DESC: Giảm dần
+SELECT * FROM student ORDER BY Subject_Name DESC;
+SELECT * FROM student ORDER BY Point_Student ASC;
+
+SELECT * FROM student LIMIT 5;
+
+SELECT * FROM student LIMIT 5, 5;
+
+SELECT * FROM student
+LIMIT 5 OFFSET 5;
+
+-- Update: Cập nhật dữ liệu
+UPDATE student SET Point_Student=10 WHERE Id = 2;
+-- Cập nhật điểm của môn Sql = 8
+UPDATE student SET point_student = 8 WHERE Subject_Name = 'Sql';
+UPDATE Student SET Point_Student = 8 WHERE Subject_Name = 'Sql'
+  AND Id > 0;
+SELECT * FROM student WHERE Subject_Name = 'sql';
+
+update student set point_Student = 8 where Subject_name = n'sql';
+-- DELETE Xóa dữ liệu
+
+DELETE FROM student WHERE id = 1;
+DELETE FROM student WHERE Point_Student = 8;
+
+SELECT * FROM student;
+
+-- Question 4: lấy ra thông tin account có full name dài nhất
+SELECT max(length(FullName)) FROM account;   -- 12
+-- SELECT * FROM Account ORDER BY LENGTH(FullName) DESC LIMIT 1;
+-- SELECT length('Nguyen Hai Lam') FROM Dual;
 
 
+-- SubQuery
+SELECT FullName, length(FullName)  Fullname_LENGTH  FROM account 
+WHERE length(FullName) = (SELECT max(length(FullName)) FROM account);
 
 
+WITH cte_MaxLengthFullname AS(
+	SELECT max(length(FullName)) Max_Fullname FROM account
+--     SELECT max(length(FullName)) Max_Fullname FROM account
+--     SELECT max(length(FullName)) Max_Fullname FROM account
+--     SELECT max(length(FullName)) Max_Fullname FROM account
+--     SELECT max(length(FullName)) Max_Fullname FROM account
+--     SELECT max(length(FullName)) Max_Fullname FROM account
+)
+SELECT *  FROM account 
+WHERE length(FullName) = (SELECT Max_Fullname FROM cte_MaxLengthFullname);
 
+-- Question 5: Lấy ra thông tin account có full name dài nhất và thuộc phòng ban có id = 3
+
+
+-- INNER JOIN?
+SELECT a.AccountID, a.Email, a.FullName, d.DepartmentName FROM `account` a
+INNER JOIN department d ON a.DepartmentID = d.DepartmentID;
+
+SELECT * FROM `account` a
+INNER JOIN department d ON a.DepartmentID = d.DepartmentID;
+
+SELECT * FROM account;  -- DepartmentID null
+
+-- LEFT JOIN
+SELECT * FROM `account` a
+LEFT JOIN department d ON a.DepartmentID = d.DepartmentID;
+-- <==>
+SELECT * FROM `department` d
+RIGHT JOIN account a ON a.DepartmentID = d.DepartmentID;
+
+-- RIGHT JOIN
+SELECT * FROM `account` a
+RIGHT JOIN department d ON a.DepartmentID = d.DepartmentID;
+-- <==>
+SELECT * FROM department a
+LEFT JOIN account d ON a.DepartmentID = d.DepartmentID;
+
+SELECT * FROM department;
+
+-- LEFT EXCLUDING JOIN
+SELECT * FROM `account` a
+LEFT JOIN department d ON a.DepartmentID = d.DepartmentID
+WHERE d.DepartmentID IS NULL;
+
+
+-- RIGHT EXCLUDING JOIN
+SELECT * FROM `account` a
+RIGHT JOIN department d ON a.DepartmentID = d.DepartmentID
+WHERE a.DepartmentID IS NULL;
+
+
+SELECT *  FROM account a
+INNER JOIN department d ON a.DepartmentID = d.DepartmentID
+UNION
+SELECT *  FROM account a
+RIGHT JOIN department d ON a.DepartmentID = d.DepartmentID
+UNION
+SELECT *  FROM account a
+LEFT JOIN department d ON a.DepartmentID = d.DepartmentID;
+
+SELECT * FROM account a
+LEFT JOIN department d ON a.DepartmentID = d.DepartmentID
+UNION
+SELECT * FROM account a
+RIGHT JOIN department d ON a.DepartmentID = d.DepartmentID;
+
+SELECT * FROM account 
+RIGHT JOIN department ON account.AccountID=department.DepartmentID
+UNION 
+SELECT * FROM account 
+LEFT JOIN department ON account.AccountID=department.DepartmentID;
+
+SELECT * FROM Account  A
+Left JOIN Department D  ON A.DepartmentID = D.DepartmentID
+UNION 
+SELECT * FROM Account  A
+RIGHT JOIN Department D ON A.DepartmentID = D.DepartmentID
+WHERE A.DepartmentID IS NULL;
+
+
+-- Chữa bài tập
+-- Question 4: Viết lệnh để lấy ra danh sách các phòng ban có >=3 nhân viên
+-- Xác định ra các bảng dữ liệu liên quan: Account, Deartment
+
+SELECT DepartmentID, count(*) FROM account 
+GROUP BY DepartmentID
+HAVING count(*)  >=3;
 
 
 
