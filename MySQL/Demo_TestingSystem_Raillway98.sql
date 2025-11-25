@@ -493,13 +493,141 @@ WHERE A.DepartmentID IS NULL;
 -- Chữa bài tập
 -- Question 4: Viết lệnh để lấy ra danh sách các phòng ban có >=3 nhân viên
 -- Xác định ra các bảng dữ liệu liên quan: Account, Deartment
-
-SELECT DepartmentID, count(*) FROM account 
+-- Xác định bảng dữ liệu gốc: Account
+SELECT a.DepartmentID, d.DepartmentName, count(*) Amount FROM account  a
+INNER JOIN department d ON a.DepartmentID = d.DepartmentID
 GROUP BY DepartmentID
 HAVING count(*)  >=3;
 
+SELECT * FROM account;
+
+-- Question 5: Viết lệnh để lấy ra danh sách câu hỏi được sử dụng trong đề thi nhiều nhất
+-- Question, Exam, examquestion
+-- Bảng dữ liệu gốc: examquestion
+WITH cte_amount_question AS (
+	SELECT count(*) amount FROM examquestion
+	GROUP BY QuestionID
+)
+SELECT ex.QuestionID, q.Content, Count(*) FROM examquestion ex
+INNER JOIN question q  ON q.QuestionID = ex.QuestionID
+GROUP BY ex.QuestionID
+HAVING COUNT(*) = (SELECT max(amount) FROM cte_amount_question) ;
 
 
+-- Tìm hiểu VIEW trong MySQL
+SELECT a.AccountID, a.Email, a.Username,a.FullName, d.DepartmentName FROM account a 
+INNER JOIN department d ON a.DepartmentID = d.DepartmentID;
+
+-- Tạo 1 lần
+CREATE OR REPLACE VIEW vw_AccountList AS 
+	SELECT a.AccountID, a.Email, a.Username,a.FullName, d.DepartmentName FROM account a 
+	INNER JOIN department d ON a.DepartmentID = d.DepartmentID;
+
+SELECT * FROM vw_AccountList;
+DROP VIEW vw_AccountList;
+-- Hạn chế truy cập vào những bảng dữ liệu chính
+
+create or replace view  VW as 
+SELECT a.*, d.* FROM account a
+inner JOIN department d ON a.DepartmentID = d.DepartmentID;
 
 
+CREATE OR REPLACE VIEW vw_AccoutList_Sale AS 
+	SELECT a.AccountID ,a.Username ,a.FullName ,a.DepartmentID , d.DepartmentName FROM account a
+    INNER JOIN department d ON a.departmentID = d.departmentID 
+    Where departmentName = 'Sale';
+    
+SELECT * FROM vw_AccoutList_Sale ;
 
+
+CREATE OR REPLACE VIEW vw_group_max_mem AS 
+WITH cte_maxAccount AS(
+SELECT count(*) ma FROM GroupAccount
+GROUP BY GroupID
+)
+SELECT a.*,ga.GroupID, count(*) FROM Account a
+JOIN GroupAccount ga ON ga.AccountID=a.AccountID
+GROUP BY GroupID
+HAVING count(*) = (SELECT max(ma) FROM cte_maxAccount);
+
+CREATE OR REPLACE VIEW vw_groupAccount AS
+WITH cte_maxAccount AS(
+SELECT count(*) AS Amount FROM groupaccount ga
+GROUP BY ga.AccountID
+)
+SELECT ga.AccountID, a.FullName, COUNT(*) Amount FROM groupaccount ga
+INNER JOIN account a ON a.AccountID = ga.AccountID
+GROUP BY ga.AccountID
+HAVING COUNT(*) = (SELECT max(Amount) FROM cte_maxAccount);
+
+SELECT * FROM groupaccount;
+
+-- Nhóm: groupID: Group có bao nhiêu account tham gia
+-- Nhóm: accountID: account tham gia vào những group nào
+-- Question 3: Tạo view có chứa câu hỏi có những content quá dài (content quá 300 từ
+-- được coi là quá dài) và xóa nó đi
+CREATE OR REPLACE VIEW vw_content_300 AS
+SELECT * FROM question
+WHERE length(Content)>300;
+
+DROP VIEW vw_content_300;
+
+-- Stored Procedure
+-- Tạo 1 sp lấy danh sách account
+SELECT * FROM account;
+DROP PROCEDURE IF EXISTS sp_getListAccount;
+DELIMITER $$
+CREATE PROCEDURE sp_getListAccount()
+	BEGIN
+		SELECT * FROM account;
+	END$$
+DELIMITER ;
+CALL sp_getListAccount();
+
+-- Tạo 1 sp lấy account có id =2
+
+DROP PROCEDURE IF EXISTS sp_getAccountByAccountID;
+DELIMITER $$
+CREATE PROCEDURE sp_getAccountByAccountID(IN in_AccountID TINYINT)
+	BEGIN
+		SELECT * FROM account WHERE AccountID =  in_AccountID;
+	END$$
+DELIMITER ;
+
+CALL sp_getAccountByAccountID(5);
+
+-- Viết SP để Insert dữ liệu vào bảng Account với thông tin đầu vào qua các tham số
+DROP PROCEDURE IF EXISTS sp_insertAccount;
+DELIMITER $$
+CREATE PROCEDURE sp_insertAccount(
+    IN p_Email VARCHAR(50),
+    IN p_Username VARCHAR(50),
+    IN p_FullName VARCHAR(100),
+    IN p_DepartmentID TINYINT UNSIGNED,
+    IN p_PositionID TINYINT UNSIGNED
+)
+BEGIN
+    INSERT INTO Account (Email, Username, FullName, DepartmentID, PositionID)
+    VALUES (p_Email, p_Username, p_FullName, p_DepartmentID, p_PositionID);
+END$$
+DELIMITER ;
+CALL sp_insertAccount(
+    'nguyenvana@gmail.com',
+    'nguyenvana',
+    'Nguyễn Văn Á Á À',
+    2,   
+    1    
+);
+
+CALL sp_insertAccount(
+    'nguyenvana_1@gmail.com',
+    'nguyenvana_1',
+    'Nguyễn Văn Á Á À_1',
+    2,   
+    1    
+);
+SELECT * FROM account;
+
+-- Xóa tài khoản người dùng theo ID
+-- Question 1: Tạo store để người dùng nhập vào tên phòng ban và in ra tất cả các
+-- account thuộc phòng ban đó
