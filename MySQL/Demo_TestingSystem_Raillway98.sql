@@ -575,13 +575,16 @@ DROP VIEW vw_content_300;
 -- Stored Procedure
 -- Tạo 1 sp lấy danh sách account
 SELECT * FROM account;
+
 DROP PROCEDURE IF EXISTS sp_getListAccount;
+
 DELIMITER $$
 CREATE PROCEDURE sp_getListAccount()
 	BEGIN
 		SELECT * FROM account;
 	END$$
 DELIMITER ;
+
 CALL sp_getListAccount();
 
 -- Tạo 1 sp lấy account có id =2
@@ -629,5 +632,330 @@ CALL sp_insertAccount(
 SELECT * FROM account;
 
 -- Xóa tài khoản người dùng theo ID
+DROP PROCEDURE IF EXISTS sp_DeleteAccountByID;
+DELIMITER $$
+CREATE PROCEDURE sp_DeleteAccountByID(
+    IN p_AccountID TINYINT UNSIGNED
+)
+BEGIN
+    DELETE FROM account WHERE AccountID =p_AccountID;
+END$$
+DELIMITER ;
+CALL sp_DeleteAccountByID(1);
 -- Question 1: Tạo store để người dùng nhập vào tên phòng ban và in ra tất cả các
 -- account thuộc phòng ban đó
+-- Lấy ra fullname của account theo accountId nhập vào
+DROP PROCEDURE IF EXISTS sp_getFullnameByAccountId;
+DELIMITER $$
+CREATE PROCEDURE sp_getFullnameByAccountId(IN in_accountId TINYINT, OUT out_fullname VARCHAR(50))
+BEGIN
+    SELECT FullName INTO out_fullname FROM account WHERE AccountID= in_accountId;
+END$$
+DELIMITER ;
+
+-- CALL sp_getFullnameByAccountId(4);
+-- CALL sp_getFullNameByAccountId(4,out_fullname );
+-- Khai báo ra biến để lưu trữ dữ liệu đầu ra 
+SET @v_fullname = " ";
+
+CALL sp_getFullNameByAccountId(6,@v_fullname);
+
+SELECT @v_fullname;
+
+-- Khai báo biến, phạm vi sử dụng
+-- Sử dụng SET-- Khai báo biến theo Session
+SET @myName = "daonq";
+SELECT @myName;
+SET @myName = "Nguyễn Quang Đạo";
+SELECT @myName;
+-- 
+SELECT FullName INTO @myName FROM account WHERE AccountID = 1;
+SELECT @myName;
+
+-- Khai báo biến theo Local 
+
+DROP PROCEDURE IF EXISTS sp_testVariable;
+DELIMITER $$
+CREATE PROCEDURE sp_testVariable()
+BEGIN
+    -- khai báo biến ở đây, trong sp==> phạm vi Local
+    DECLARE number1 INT;
+    DECLARE number2 INT DEFAULT 10;  -- number = 10
+    
+    -- Thay đổi giá trị của biến
+    SET number1 = 20;  -- number =20
+    SELECT 50 INTO number2;  
+    
+    SELECT number1, number2;
+END$$
+DELIMITER ;
+
+CALL sp_testVariable();
+
+ -- SELECT number1, number2;
+ 
+ -- Hệ thống
+ SELECT @@version;
+
+-- Function- Hàm
+
+SELECT count(*) FROM account WHERE length(fullname) >6;
+-- Xây dựng 1 function dùng để tính tổng
+
+SET GLOBAL log_bin_trust_function_creators = 1;  -- Cho tao Function 
+SELECT @@log_bin_trust_function_creators;  -- 0  --> Không cho phép tạo các function
+
+DROP FUNCTION IF EXISTS f_sum;
+DELIMITER $$   
+CREATE FUNCTION f_sum(number1 INT, number2 INT) RETURNS INT  -- 1 giá trị
+BEGIN   
+	DECLARE v_result INT;
+	SET v_result = number1 + number2;
+	RETURN v_result;  
+END $$  
+
+
+SELECT f_sum(1,2) as Sum_Result;
+
+-- Viết hàm để lấy ra username từ email
+-- f_getUsernameFromEmail('daonq@vti.com.vn')   ==> username: daonq
+
+DROP FUNCTION IF EXISTS f_getUsernameFromEmail ;
+DELIMITER $$   
+CREATE FUNCTION f_getUsernameFromEmail (p_Email VARCHAR(50)) RETURNS VARCHAR(50)
+BEGIN   
+	DECLARE v_username VARCHAR(50) ;
+    SELECT SUBSTRING_INDEX(p_Email,'@', 1) INTO v_username;  -- lấy được username
+    
+	RETURN v_username;  
+END $$  
+SELECT f_getUsernamefromEmail ("daonq@vti.com.vn") AS Username ;
+SELECT f_getUsernamefromEmail ("huyht@gmail.com.vn") AS Username ;
+
+-- Viết hàm tính xem Account đã được tạo bao nhiêu ngày
+Select * From Account;
+
+DROP FUNCTION IF EXISTS f_account_days;
+DELIMITER $$   
+CREATE FUNCTION f_account_days(p_accountId TINYINT) RETURNS INT
+BEGIN   
+	DECLARE v_days INT;
+    SELECT DATEDIFF(NOW(), CreateDate ) INTO v_days FROM Account WHERE AccountID= p_accountId;  -- lấy được username
+	RETURN v_days;  
+END $$  
+
+SELECT f_account_days(1);
+
+
+-- Question 4: Tạo store Procedure để trả ra id của type question có nhiều câu hỏi nhất
+SELECT * FROM testing_system.typequestion;
+SELECT * FROM testing_system.question;
+
+WITH cte_amount_TypeQuestion AS (
+	SELECT count(*) as amount FROM question q GROUP BY q.TypeID
+)
+SELECT q.TypeID, tq.TypeName, count(*) Amount FROM question q
+INNER JOIN typequestion tq ON q.TypeID = tq.TypeID
+GROUP BY q.TypeID
+HAVING count(*) = (SELECT max(amount) FROM cte_amount_TypeQuestion);
+
+
+
+DROP PROCEDURE IF EXISTS sp_getMaxTypeQuestion;
+DELIMITER $$
+CREATE PROCEDURE sp_getMaxTypeQuestion()
+BEGIN
+	  WITH cte_amount_TypeQuestion AS (
+		SELECT count(*) as amount FROM question q GROUP BY q.TypeID
+	)
+	SELECT q.TypeID, tq.TypeName, count(*) Amount FROM question q
+	INNER JOIN typequestion tq ON q.TypeID = tq.TypeID
+	GROUP BY q.TypeID
+	HAVING count(*) = (SELECT max(amount) FROM cte_amount_TypeQuestion);
+END$$
+DELIMITER ;
+
+CALL sp_getMaxTypeQuestion();
+
+-- Mở rộng: đưa 1 ngày nào đó 1/11/2025 (IN)
+-- Sau khi có KQ ==> Đầu ra: Id của TypeQuesstion và Số lượng câu hỏi (OUT)
+
+-- Trigger MySQL  --
+SELECT * FROM account;
+INSERT INTO `testing_system`.`account` (`Email`, `Username`, `FullName`, `DepartmentID`, `PositionID`, `CreateDate`) 
+VALUES ('Test@gmail.com', 'Test', 'Test', '10', '1', '2020-04-09 00:00:00');
+-- ==> trigger
+DROP TRIGGER IF EXISTS trg_bf_Insert_Account;
+DELIMITER $$
+	CREATE TRIGGER trg_bf_Insert_Account
+    BEFORE INSERT ON `account`
+    FOR EACH ROW
+    BEGIN		
+		-- Đếm số lượng bản ghi có trong bảng Account hiện tại
+		DECLARE v_count_Acccount SMALLINT DEFAULT 0;
+		SELECT COUNT(*) INTO v_count_Acccount FROM account;
+		IF (v_count_Acccount >= 8) THEN 
+			-- Dừng chương trình
+            SIGNAL SQLSTATE '45000'
+            -- Thông báo
+            SET MESSAGE_TEXT = 'Cant add more Account';            
+        END IF;
+    END$$
+DELIMITER ;
+
+SHOW TRIGGERS;
+
+-- Viết trigger không cho phép xóa bản ghi có username là admin ở bảng Account
+DELETE FROM account WHERE Username = "Admin";
+
+DROP TRIGGER IF EXISTS trg_bf_Delete_Account;
+DELIMITER $$
+	CREATE TRIGGER trg_bf_Delete_Account
+    BEFORE DELETE ON `account`
+    FOR EACH ROW
+    BEGIN	
+		IF (OLD.Username = 'Admin') THEN 
+			-- Dừng chương trình
+            SIGNAL SQLSTATE '45000'
+            -- Thông báo
+            SET MESSAGE_TEXT = 'Cant delete this Record';            
+        END IF;
+    END$$
+DELIMITER ;
+
+SHOW TRIGGERS;
+
+-- Viết trigger cho phép khi nhân viên chuyển phòng ban, thì lưu thông tin phòng ban trước đó vào 1 bảng dữ liệu khác
+-- 2
+DROP TABLE IF EXISTS `log_Dep_Change_Account`;
+CREATE TABLE `log_Dep_Change_Account`(
+	Id 						TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	AccountID				TINYINT UNSIGNED,
+    Username				VARCHAR(50) NOT NULL,
+    OldDepartmentName		NVARCHAR(50) NOT NULL,
+	NewDepartmentName		NVARCHAR(50) NOT NULL,
+    ChangeDate				DATETIME DEFAULT NOW()
+);
+
+UPDATE `account` SET `DepartmentID` = '4' WHERE (`AccountID` = '8');
+
+DROP TRIGGER IF EXISTS trg_af_Update_Account;
+DELIMITER $$
+	CREATE TRIGGER trg_af_Update_Account
+    AFTER UPDATE ON `account`
+    FOR EACH ROW
+    BEGIN	
+	DECLARE v_DepartmentName VARCHAR(50);
+    DECLARE v_New_DepartmentName VARCHAR(50);
+    
+    
+    
+    SELECT DepartmentName INTO v_DepartmentName FROM department WHERE DepartmentID  = OLD.DepartmentID;
+    SELECT DepartmentName INTO v_New_DepartmentName FROM department WHERE DepartmentID  = NEW.DepartmentID;
+
+		-- Lấy thông tin phòng ban cũ, lưu lại vào bảng log
+        INSERT INTO `log_dep_change_account` (`AccountID`, `Username`, `OldDepartmentName`,`NewDepartmentName`, `ChangeDate`) 
+        VALUES (OLD.AccountID, OLD.Username, v_DepartmentName,v_New_DepartmentName , now());
+    END$$
+DELIMITER ;
+
+SHOW TRIGGERS;
+
+-- Question 3: Cấu hình 1 group có nhiều nhất là 5 account
+-- Tạo trigger trước khi insert vào bảng GroupAccount
+-- Lấy ra tổng số groupid trong groupaccount 
+-- Điều kiện >5
+
+SELECT * FROM groupaccount;
+INSERT INTO `groupaccount` (`GroupID`, `AccountID`,		 `JoinDate`) 
+VALUES						 ('3', 		'5', 		'2025-04-08 00:00:00');
+
+
+DROP TRIGGER IF EXISTS trg_bf_Insert_GroupAccount;
+DELIMITER $$
+	CREATE TRIGGER trg_bf_Insert_GroupAccount
+    BEFORE INSERT ON `groupaccount`
+    FOR EACH ROW
+    BEGIN	
+		-- Đếm số lượng Account đang có trong Group mà cần thêm dữ liệu
+        DECLARE v_count_acount_inGroup  MEDIUMINT DEFAULT 0;
+        SELECT count(*) INTO v_count_acount_inGroup FROM groupaccount WHERE GroupID = NEW.GroupID;  -- 1
+		IF (v_count_acount_inGroup >=5) THEN 
+				-- Dừng chương trình
+				SIGNAL SQLSTATE '45000'
+				-- Thông báo
+				SET MESSAGE_TEXT = 'Cant add this Record';            
+		END IF;
+    END$$
+DELIMITER ;
+
+
+-- Question 4: Cấu hình 1 bài thi có nhiều nhất là 10 Question
+SELECT * FROM examquestion;
+-- Gen 10 câu lệnh Insert vào bảng examquestion có cấu trúc như hình
+	-- Thông tin bảng exam và question như hình
+    -- ExamId , QuestionID là Primary key của bảng examquestion
+
+INSERT INTO examquestion (ExamID, QuestionID) VALUES (1, 1);
+INSERT INTO examquestion (ExamID, QuestionID) VALUES (1, 2);
+INSERT INTO examquestion (ExamID, QuestionID) VALUES (2, 3);
+
+INSERT INTO examquestion (ExamID, QuestionID) VALUES (3, 5);
+INSERT INTO examquestion (ExamID, QuestionID) VALUES (4, 6);
+
+INSERT INTO examquestion (ExamID, QuestionID) VALUES (6, 8);
+INSERT INTO examquestion (ExamID, QuestionID) VALUES (7, 9);
+INSERT INTO examquestion (ExamID, QuestionID) VALUES (9, 1);
+
+-- Question 1: Tạo trigger không cho phép người dùng nhập vào Group có ngày tạo trước 1 năm trước
+SELECT * FROM `group`;
+INSERT INTO `group` (`GroupName`, `CreatorID`, `CreateDate`	) 
+VALUES 				('Mentor', 		'9', 		'2024-12-02 00:00:00');
+
+SELECT date_sub('2023-01-01 00:00:00',INTERVAL 2 MONTH) ;   -- 
+SELECT datediff(now(),'2023-01-01 00:00:00');
+
+-- Question 6: Không sử dụng cấu hình default cho field DepartmentID của table
+-- Account, hãy tạo trigger cho phép người dùng khi tạo account không điền
+-- vào departmentID thì sẽ được phân vào phòng ban "waiting Department"
+
+
+-- Question 9: Viết trigger không cho phép người dùng xóa bài thi mới tạo được 2 ngày
+
+DROP TRIGGER IF EXISTS Trg_CheckBefDelExam;
+DELIMITER $$
+CREATE TRIGGER Trg_CheckBefDelExam
+BEFORE DELETE ON exam
+FOR EACH ROW
+BEGIN
+    DECLARE v_TwoDaysAgo DATETIME;
+    
+    -- Tính thời điểm 2 ngày trước
+    SET v_TwoDaysAgo = DATE_SUB(NOW(), INTERVAL 2 DAY);
+    
+    -- Kiểm tra nếu exam được tạo trong vòng 2 ngày gần đây
+    IF (OLD.CreateDate > v_TwoDaysAgo) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Không thể xóa exam mới tạo trong 2 ngày gần đây';
+    END IF;
+END$$
+DELIMITER ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
