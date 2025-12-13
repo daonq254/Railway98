@@ -100,5 +100,8 @@ public class Program6 {
 		System.out.println("Department3: " + department3.id + "  " + department3.name);
 
 		System.out.println("toString(): " + department1.toString());
+
+//		Hiển thị thông tin các account trên hệ thống
+
 	}
 }

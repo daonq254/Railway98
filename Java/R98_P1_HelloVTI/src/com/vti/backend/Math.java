@@ -1,6 +1,8 @@
 package com.vti.backend;
 
 public class Math {
+//	
+
 //	Tính tổng
 	public void sum() {
 		System.out.println("Nhập vào số thứ 1: ");
