@@ -31,9 +31,51 @@ public class Program10 {
 //		i = i + 1  ==> i++
 //		i = i - 1  ==> i--
 
-		for (int i = 0; i < nameRailway98.length; i++) {
-			System.out.println(nameRailway98[i]);
-		}
+//		for (int i = 0; i < nameRailway98.length; i++) {
+//			System.out.println("Học viên " + (i + 1) + ": " + nameRailway98[i]);
+//		}
+//
+//		for (String name : nameRailway98) {
+//			System.out.println(name);
+//		}
+//		int k = 11; // 1 - 10
+//		while (k <= 10) {
+//			System.out.println(k);
+//			k++;
+//		}
+//		
+//		Scanner scanner = new Scanner(System.in);
+//		while (true) {
+//			System.out.println("mời bạn nhập vào tuổi");
+//			int age = scanner.nextInt();
+//
+//			if (age > 0) {
+//				System.out.println("Tuổi bạn vừa nhập là: " + age);
+//
+//				return;
+//			}
+//		}
+//		int j = 100;
+//		do {
+//			System.out.println(j);
+//			j++;
+//		} while (j <= 5);
+
+//		for (int i = 1; i <= 10; i++) {
+//			if (i == 5) {
+//				break;
+//			}
+//			System.out.println(i);
+//		}
+//		
+//		switch (key) {
+//		case value:
+//			
+//			break;
+//
+//		default:
+//			break;
+//		}
 
 	}
 }
