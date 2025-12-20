@@ -1,11 +1,33 @@
 package com.vti.entity;
 
-public class Account {
+public class Person {
 	private int id;
 	private String email;
 	private String userName;
 	private String fullName;
 
+	public Person() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public Person(int id, String email, String userName, String fullName) {
+		super();
+		this.id = id;
+		this.email = email;
+		this.userName = userName;
+		this.fullName = fullName;
+	}
+
+//	
+	public void showInfo() {
+		System.out.println("ID: " + this.id);
+		System.out.println("email" + this.email);
+		System.out.println("userName: " + this.userName);
+		System.out.println("fullName: " + this.fullName);
+	}
+
+//	
 	public int getId() {
 		return id;
 	}
@@ -36,24 +58,6 @@ public class Account {
 
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
-	}
-
-	public Account() {
-		super();
-	}
-// Alt + Shift + S
-
-	public Account(int id, String email, String userName, String fullName) {
-		super();
-		this.id = id;
-		this.email = email;
-		this.userName = userName;
-		this.fullName = fullName;
-	}
-
-	@Override
-	public String toString() {
-		return "Account [id=" + id + ", email=" + email + ", userName=" + userName + ", fullName=" + fullName + "]";
 	}
 
 }
