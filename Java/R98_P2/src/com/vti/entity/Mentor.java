@@ -22,4 +22,9 @@ public class Mentor extends Person {
 		this.yearsOfExperience = yearsOfExperience;
 	}
 
+	@Override
+	public void showInfo() {
+		System.out.println("Thông tin của mentor là: ");
+		System.out.println("YearsOfExperience: " + this.yearsOfExperience);
+	}
 }

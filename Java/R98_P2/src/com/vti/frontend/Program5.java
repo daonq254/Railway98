@@ -27,9 +27,10 @@ public class Program5 {
 //				+ trainee1.getUniversity());
 //		trainee1.showInfo();
 //		trainee1.getUniversity();
-		trainee1.showInfotrainee();
+//		trainee1.showInfotrainee();
+		trainee1.showInfo();
 		System.out.println("------------------");
 
-//		mentor1.showInfo();
+		mentor1.showInfo();
 	}
 }
