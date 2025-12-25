@@ -1,6 +1,6 @@
 package com.vti.entity;
 
-public class Mentor extends Person {
+public class Mentor extends Person implements IToDoPerson, ITodoMentor {
 
 	private int yearsOfExperience;
 
@@ -24,7 +24,58 @@ public class Mentor extends Person {
 
 	@Override
 	public void showInfo() {
-		System.out.println("Thông tin của mentor là: ");
-		System.out.println("YearsOfExperience: " + this.yearsOfExperience);
+		// TODO Auto-generated method stub
+
 	}
+
+	@Override
+	public void login() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void attendClass() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void viewSchedule() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void sentFeedBack() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void reviewAssignment() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void createLesson() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void supportTrainee() {
+		// TODO Auto-generated method stub
+
+	}
+
+//	@Override
+//	public void showInfo() {
+//		System.out.println("Thông tin của mentor là: ");
+////		System.out.println("ID: " + super.getId());
+//		System.out.println("ID: " + super.id + " " + super.email);
+//		System.out.println("YearsOfExperience: " + this.yearsOfExperience);
+//	}
+
 }

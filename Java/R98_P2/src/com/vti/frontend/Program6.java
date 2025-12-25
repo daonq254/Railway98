@@ -30,5 +30,9 @@ public class Program6 {
 			System.out.println(name);
 		}
 
+//		
+//		Person person = new Person();
+//		person.setId(1);
+//		person.setEmail("person1@gmail.com");
 	}
 }

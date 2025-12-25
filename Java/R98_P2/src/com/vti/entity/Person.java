@@ -1,8 +1,8 @@
 package com.vti.entity;
 
-public class Person {
-	private int id;
-	private String email;
+public abstract class Person {
+	protected int id;
+	protected String email;
 	private String userName;
 	private String fullName;
 
@@ -19,13 +19,23 @@ public class Person {
 		this.fullName = fullName;
 	}
 
+//	public abstract void showInfo();
+//
+//	public abstract void login();
+//
+//	public abstract void attendClass();
+//
+//	public abstract void viewSchedule();
+//
+//	public abstract void sentFeedBack();
+
 //	
-	public void showInfo() {
-		System.out.println("ID: " + this.id);
-		System.out.println("email" + this.email);
-		System.out.println("userName: " + this.userName);
-		System.out.println("fullName: " + this.fullName);
-	}
+//	public void showInfo() {
+//		System.out.println("ID: " + this.id);
+//		System.out.println("email" + this.email);
+//		System.out.println("userName: " + this.userName);
+//		System.out.println("fullName: " + this.fullName);
+//	}
 
 //	
 	public int getId() {

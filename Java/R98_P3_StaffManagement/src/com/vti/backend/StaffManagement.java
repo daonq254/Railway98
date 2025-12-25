@@ -1,6 +1,7 @@
 package com.vti.backend;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Scanner;
 
 import com.vti.entity.Engineer;
@@ -102,7 +103,22 @@ public class StaffManagement {
 
 //	Xóa cán bộ theo họ tên
 	public void deleteStaffByName() {
-		// TODO Auto-generated method stub
+		System.out.println("Nhập vào tên của cán bộ cần xóa");
+		String deleteName = scanner.next();
+
+		Iterator<Staff> iterator = staffArrayList.iterator();
+		while (iterator.hasNext()) {
+			Staff staff = iterator.next();
+
+			if (staff.getName().equals(deleteName)) {
+				iterator.remove();
+				System.out.println("Đã xóa thành công!!");
+				System.out.println("Danh sách Cán bộ sau khi xóa: ");
+				showListStaff();
+			}
+		}
+
+		;
 
 	}
 
