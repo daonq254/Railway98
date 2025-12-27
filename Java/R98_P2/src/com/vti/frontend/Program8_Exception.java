@@ -25,9 +25,10 @@ public class Program8_Exception {
 
 //		String[] nameRailway98 = { "Thịnh", "Nam", "Hương", "Bình" };
 //		System.out.println("Thông tin bạn học viên: " + nameRailway98[5]);
-		System.out.println("Hãy nhập vào tuổi của bạn");
-		int age = scanner.nextInt();
-
-		System.out.println("Tuổi của bạn là: " + age);
+//
+//		System.out.println("Hãy nhập vào tuổi của bạn");
+//		int age = scanner.nextInt();
+//
+//		System.out.println("Tuổi của bạn là: " + age);
 	}
 }

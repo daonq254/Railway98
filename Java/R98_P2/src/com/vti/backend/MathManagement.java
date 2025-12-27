@@ -21,4 +21,26 @@ public class MathManagement {
 
 		return result;
 	}
+
+//	Hàm tính phép chia 2 số
+	public float divide(int num1, int num2) throws Exception {
+//		float result = 0;
+//		try {
+//			result = num1 / num2;
+//			return result;
+//		} catch (ArithmeticException e) {
+//			System.out.println("Không thể thực hiện phép chia cho số )");
+//		}
+		try {
+			float result = num1 / num2;
+			return result;
+		} catch (ArithmeticException e) {
+//			Không xử lý
+//			Thông báo cho chỗ sử dụng hàm biết có exception
+			throw new Exception();
+
+		}
+
+	}
+
 }
