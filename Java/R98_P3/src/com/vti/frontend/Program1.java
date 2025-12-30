@@ -8,22 +8,22 @@ public class Program1 {
 		Student.className = "Railway98";
 
 		Student student1 = new Student();
-		student1.setId(1);
+//		student1.setId(1);
 		student1.setName("Lâm");
 //		student1.setClassName("Railway98");
 
 		Student student2 = new Student();
-		student2.setId(2);
+//		student2.setId(2);
 		student2.setName("Nam");
 //		student2.setClassName("Railway98");
 
 		Student student3 = new Student();
-		student3.setId(3);
+//		student3.setId(3);
 		student3.setName("Thủy");
 //		student3.setClassName("Railway98");
 
 		Student student4 = new Student();
-		student4.setId(4);
+//		student4.setId(4);
 		student4.setName("Hoàng");
 //		student4.setClassName("Railway98");
 //

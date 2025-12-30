@@ -4,6 +4,13 @@ public class Student {
 	private int id;
 	private String name;
 	public static String className; // quản lý ở lớp Student
+	private static int genId = 1;
+
+	public Student() {
+		super();
+		this.id = genId;
+		genId++;
+	}
 
 	public int getId() {
 		return id;
