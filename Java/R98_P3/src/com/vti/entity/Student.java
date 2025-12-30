@@ -2,15 +2,31 @@ package com.vti.entity;
 
 public class Student {
 	private int id;
+
+	private final String code; // Sau khi đã được cấp thì sẽ không thay đổi VTI001
+
 	private String name;
 	public static String className; // quản lý ở lớp Student
 	private static int genId = 1;
 
-	public Student() {
+	public Student(String code) {
 		super();
+		this.code = code;
 		this.id = genId;
 		genId++;
 	}
+
+	public final void showInfo() {
+		System.out.println("....................");
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+//	public void setCode(String code) {
+//		this.code = code;
+//	}
 
 	public int getId() {
 		return id;
@@ -38,7 +54,7 @@ public class Student {
 
 	@Override
 	public String toString() {
-		return "Student [id=" + id + ", name=" + name + ", className=" + className + "]";
+		return "Student [id=" + id + ", code=" + code + ", name=" + name + "]";
 	}
 
 }
