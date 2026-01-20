@@ -18,7 +18,7 @@ public class JdbcUtils {
 	public JdbcUtils() throws FileNotFoundException, IOException {
 		property = new Properties();
 		property.load(new FileInputStream(
-				"C:\\Users\\ThinkPad\\eclipse-workspace\\Railway98\\Java\\R98_P5_ConnectDB\\src\\com\\vti\\resources\\database.properties"));
+				"C:\\Users\\ThinkPad\\eclipse-workspace\\Railway98\\Java\\R98_P6_Department_DAO\\src\\com\\vti\\resources\\database.properties"));
 	}
 
 	public void connnectionTestting() throws ClassNotFoundException, SQLException {

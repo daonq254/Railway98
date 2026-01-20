@@ -1,10 +1,13 @@
 package com.vti.frontend;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import com.vti.backend.DepartmentManagement;
 import com.vti.utils.ScannerUtils;
 
 public class Program {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException {
 		DepartmentManagement departmentManagement = new DepartmentManagement();
 
 		while (true) {
