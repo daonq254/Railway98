@@ -55,4 +55,17 @@ public class DepartmentDAO {
 		return null;
 	}
 
+	public Boolean createNewDepartment(String dep_name) throws SQLException, ClassNotFoundException {
+
+		String sql_InsertDepartment = "INSERT INTO department (`DepartmentName`) VALUES (?);";
+		PreparedStatement preparedStatement = jdbcUtils.createPrepareStatement(sql_InsertDepartment);
+		preparedStatement.setString(1, dep_name);
+
+		int result = preparedStatement.executeUpdate(); // 0 1
+		if (result == 1) {
+			return true;
+		}
+		return false;
+	}
+
 }

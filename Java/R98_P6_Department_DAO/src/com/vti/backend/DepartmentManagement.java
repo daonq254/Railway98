@@ -50,9 +50,16 @@ public class DepartmentManagement {
 	}
 
 //	Hàm Thêm mới phòng ban
-	public void createNewDepartment() {
-		// TODO Auto-generated method stub
-
+	public void createNewDepartment() throws ClassNotFoundException, SQLException {
+		System.out.println("Mời bạn nhập vào tên phòng ban cần tạo mới");
+		String dep_name = ScannerUtils.inputString();
+		Boolean resultCreateDepartment = departmentDAO.createNewDepartment(dep_name);
+		if (resultCreateDepartment) {
+			System.out.println("Đã thêm mới phòng ban thành công");
+			showListDepartment();
+		} else {
+			System.out.println("Đã có lỗi xảy ra, hãy kiểm tra lại");
+		}
 	}
 
 }
