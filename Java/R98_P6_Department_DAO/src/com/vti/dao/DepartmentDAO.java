@@ -2,6 +2,7 @@ package com.vti.dao;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,28 +18,41 @@ public class DepartmentDAO {
 		jdbcUtils = new JdbcUtils();
 	}
 
-	public List<Department> getListDepartment() throws ClassNotFoundException {
-		try {
+	public List<Department> getListDepartment() throws ClassNotFoundException, SQLException {
+
 //			Tạo kết nối tới DB Server
-			String sql_SelectDepartment = "SELECT * FROM Department ORDER BY DepartmentID;";
+		String sql_SelectDepartment = "SELECT * FROM Department ORDER BY DepartmentID;";
 //			Chạy lệnh SQL 
-			ResultSet resultSet = jdbcUtils.executeQuery(sql_SelectDepartment);
+		ResultSet resultSet = jdbcUtils.executeQuery(sql_SelectDepartment);
 
-			List<Department> listdeDepartments = new ArrayList<Department>();
-			while (resultSet.next()) {
-				Department department = new Department();
-				department.setId(resultSet.getInt(1));
-				department.setName(resultSet.getString(2));
+		List<Department> listdeDepartments = new ArrayList<Department>();
+		while (resultSet.next()) {
+			Department department = new Department();
+			department.setId(resultSet.getInt(1));
+			department.setName(resultSet.getString(2));
 
-				listdeDepartments.add(department);
-			}
-			return listdeDepartments;
-
-		} catch (SQLException e) {
-			e.printStackTrace();
+			listdeDepartments.add(department);
 		}
-		return null;
+		return listdeDepartments;
 
+	}
+
+	public Department getDepartmentByID(int idFind) throws ClassNotFoundException, SQLException {
+		String sql_SelectDepartmentbyID = "SELECT * FROM department WHERE DepartmentID=?;";
+		PreparedStatement preparedStatement = jdbcUtils.createPrepareStatement(sql_SelectDepartmentbyID);
+		preparedStatement.setInt(1, idFind);
+
+		ResultSet resultSet = preparedStatement.executeQuery();
+
+		if (resultSet.next()) {
+			Department department = new Department();
+			department.setId(resultSet.getInt(1));
+			department.setName(resultSet.getString(2));
+
+			return department;
+		}
+
+		return null;
 	}
 
 }

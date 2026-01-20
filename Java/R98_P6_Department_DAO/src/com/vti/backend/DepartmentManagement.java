@@ -2,10 +2,12 @@ package com.vti.backend;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 import com.vti.dao.DepartmentDAO;
 import com.vti.entity.Department;
+import com.vti.utils.ScannerUtils;
 
 public class DepartmentManagement {
 	private DepartmentDAO departmentDAO;
@@ -15,19 +17,36 @@ public class DepartmentManagement {
 		departmentDAO = new DepartmentDAO();
 	}
 
-	public void showListDepartment() throws ClassNotFoundException {
+	public void showListDepartment() throws ClassNotFoundException, SQLException {
 
 		List<Department> listDepartments = departmentDAO.getListDepartment();
 
+		System.out.println("+-----------+--------------------------------------+");
+		System.out.format("|    %-7s|      %-32s|%n", "ID", "Department Name");
+
+		System.out.println("+-----------+--------------------------------------+");
+
 		for (Department department : listDepartments) {
-			System.out.println(department.toString());
+			System.out.format("|    %-7d|      %-32s|%n", department.getId(), department.getName());
 		}
+
+		System.out.println("+-----------+--------------------------------------+");
 	}
 
 //	Hàm hiển thị danh sách phòng ban theo id
-	public void showDepartmentByID() {
-		// TODO Auto-generated method stub
-
+	public void showDepartmentByID() throws ClassNotFoundException, SQLException {
+		System.out.println("Mời bạn nhập vào ID của phòng ban cần tìm kiếm");
+		int idFind = ScannerUtils.inputIntPositive();
+		Department department = departmentDAO.getDepartmentByID(idFind);
+		if (department != null) {
+			System.out.println("+-----------+--------------------------------------+");
+			System.out.format("|    %-7s|      %-32s|%n", "ID", "Department Name");
+			System.out.println("+-----------+--------------------------------------+");
+			System.out.format("|    %-7d|      %-32s|%n", department.getId(), department.getName());
+			System.out.println("+-----------+--------------------------------------+");
+		} else {
+			System.out.println("Không có phòng ban cần tìm kiếm!!!");
+		}
 	}
 
 //	Hàm Thêm mới phòng ban

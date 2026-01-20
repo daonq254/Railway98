@@ -2,12 +2,14 @@ package com.vti.frontend;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import com.vti.backend.DepartmentManagement;
 import com.vti.utils.ScannerUtils;
 
 public class Program {
-	public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException {
+	public static void main(String[] args)
+			throws FileNotFoundException, IOException, ClassNotFoundException, SQLException {
 		DepartmentManagement departmentManagement = new DepartmentManagement();
 
 		while (true) {
