@@ -1,9 +1,14 @@
 package com.vti.frontend;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.sql.SQLException;
+
 import com.vti.utils.ScannerUtils;
 
 public class Program {
-	public static void main(String[] args) {
+	public static void main(String[] args)
+			throws ClassNotFoundException, SQLException, FileNotFoundException, IOException {
 		DepartmentProgram departmentProgram = new DepartmentProgram();
 
 		while (true) {
