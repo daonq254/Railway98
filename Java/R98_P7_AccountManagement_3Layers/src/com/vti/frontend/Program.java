@@ -4,11 +4,13 @@ import com.vti.utils.ScannerUtils;
 
 public class Program {
 	public static void main(String[] args) {
+		DepartmentProgram departmentProgram = new DepartmentProgram();
+
 		while (true) {
 			System.out.format("+--------------------------------------------------------------------------+%n");
 			System.out.format("|                        Chọn chức năng                                    |%n");
 			System.out.format("+--------------------------------------------------------------------------+%n");
-			System.out.format("| %-72s |%n", "1. Hiển thị danh sách phòng ban theo ID");
+			System.out.format("| %-72s |%n", "1. Hiển thị danh sách phòng ban");
 			System.out.format("| %-72s |%n", "2. Tìm kiếm phòng ban theo ID");
 			System.out.format("| %-72s |%n", "3. Kiểm tra tồn tại tên phòng ban");
 			System.out.format("| %-72s |%n", "4. Tạo mới phòng ban");
@@ -21,6 +23,7 @@ public class Program {
 
 			switch (choose) {
 			case 1:
+				departmentProgram.getAllDepartment();
 				break;
 			case 2:
 				break;
