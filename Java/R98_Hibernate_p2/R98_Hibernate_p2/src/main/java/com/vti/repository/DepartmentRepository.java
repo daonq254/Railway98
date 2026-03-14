@@ -58,4 +58,54 @@ public class DepartmentRepository {
 		}
 	}
 
+//	Hàm tìm kiếm phòng ban theo tên
+	public Department getDepartmentByName(String name) {
+		Session session = null;
+		try {
+			// get session
+			session = sessionFactory.openSession();
+
+//
+//			HQL
+//			FROM Department WHERE name = :nameParameter
+			// create hql query
+			Query<Department> query = session.createQuery("FROM Department WHERE name = :nameParameter");
+
+			// set parameter
+			query.setParameter("nameParameter", name);
+
+			// get result
+			Department department = query.uniqueResult();
+			return department;
+
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+	}
+
+//	Hàm thêm mới Department
+
+	public void createDepartment(Department department) {
+
+		Session session = null;
+
+		try {
+
+			// get session
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+
+			// create
+			session.save(department);
+
+			session.getTransaction().commit();
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+	}
+
 }
