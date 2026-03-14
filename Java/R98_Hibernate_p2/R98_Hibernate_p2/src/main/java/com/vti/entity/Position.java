@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,20 +14,21 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "department", catalog = "testing_system")
-public class Department implements Serializable {
-	@Column(name = "DepartmentID")
+@Table(name = "Position", catalog = "testing_system")
+public class Position implements Serializable {
+	@Column(name = "PositionID")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private short id;
 
-	@Column(name = "DepartmentName", nullable = false, unique = true)
-	private String name;
+	@Column(name = "PositionName", nullable = false, unique = true)
+	@Enumerated(EnumType.STRING)
+	private PositionName name;
 
-	@OneToMany(mappedBy = "department")
+	@OneToMany(mappedBy = "position")
 	private List<Account> accounts;
 
-	public Department() {
+	public Position() {
 		super();
 	}
 
@@ -33,21 +36,16 @@ public class Department implements Serializable {
 		return id;
 	}
 
-	public void setId(byte id) {
+	public void setId(short id) {
 		this.id = id;
 	}
 
-	public String getName() {
+	public PositionName getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(PositionName name) {
 		this.name = name;
-	}
-
-	@Override
-	public String toString() {
-		return "Department [id=" + id + ", name=" + name + "]";
 	}
 
 }
