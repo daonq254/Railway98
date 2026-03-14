@@ -23,7 +23,7 @@ public class DemoDepartment {
 				break;
 			case 2:
 				System.out.println("Nhập vào ID của phòng ban");
-
+				departmentFunction.getDepartmentById();
 				break;
 			case 3:
 				System.out.println("Nhập vào tên phòng ban cần tìm kiếm");

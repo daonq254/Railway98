@@ -16,6 +16,7 @@ public class Department implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private short id;
+
 	@Column(name = "DepartmentName", nullable = false, unique = true)
 	private String name;
 
