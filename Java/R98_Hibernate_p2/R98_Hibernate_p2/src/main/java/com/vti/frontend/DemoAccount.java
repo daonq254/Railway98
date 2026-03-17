@@ -13,7 +13,7 @@ public class DemoAccount {
 			System.out.format("|                        Choose please                                     |%n");
 			System.out.format("+--------------------------------------------------------------------------+%n");
 			System.out.format(leftAlignFormat, "1. Danh sách Account trên hệ thống");
-			System.out.format(leftAlignFormat, "2. Danh sách Account Theo ID");
+			System.out.format(leftAlignFormat, "2. Tìm Account Theo ID");
 			System.out.format(leftAlignFormat, "3. Tạo mới Account");
 			System.out.format(leftAlignFormat, "4. Xóa Account");
 			System.out.format(leftAlignFormat, "5. Update Account");
@@ -22,9 +22,10 @@ public class DemoAccount {
 			int choose = scanner.nextInt();
 			switch (choose) {
 			case 1:
-				accountFunction.showListDepartment();
+				accountFunction.showListAccount();
 				break;
 			case 2:
+				accountFunction.getAccountById();
 				break;
 			case 3:
 				break;
